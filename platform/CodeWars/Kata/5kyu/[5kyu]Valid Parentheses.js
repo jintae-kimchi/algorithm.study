@@ -50,6 +50,11 @@ Examples
 // )
 // [] ( + )
 
+/**
+ * 문제가 대놓고 스택 개념이라 스택으로 풀었다.
+ * @param {*} parens
+ * @returns
+ */
 function validParentheses(parens) {
     const stack = [];
     for (let i = 0; i < parens.length; i++) {
@@ -64,6 +69,13 @@ function validParentheses(parens) {
     return stack.length === 0;
 }
 
+/**
+ * 근데 사실 스택에 데이터를 쌓을 필요 없이 짝이 맞는가를 보면 되는거였다.
+ * push pop 대신 +, - 를 통해 괄호 닫는게 더 많아져 음수가 되는가를 보면 되었다.
+ * 그리고 남은 여는괄호는 0인지를 보면 된다.
+ * @param {*} parens
+ * @returns
+ */
 function validParentheses_refactored(parens) {
     let pair = 0;
     for (let i = 0; i < parens.length; i++) {
