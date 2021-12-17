@@ -25,31 +25,60 @@ vinko는 참여자 명단에는 있지만, 완주자 명단에는 없기 때문�
 mislav는 참여자 명단에는 두 명이 있지만, 완주자 명단에는 한 명밖에 없기 때문에 한명은 완주하지 못했습니다.
  */
 
-var test = require('../../../../util/testHelper');
+// var test = require("../../../../util/testHelper");
 
 function solution(participant, completion) {
     var set = {};
-    participant.forEach(p => {
-        set[p] ? set[p] += 1 : set[p] = 1;
+    participant.forEach((p) => {
+        set[p] ? (set[p] += 1) : (set[p] = 1);
     });
-    completion.forEach(c => {
-        set[c] ? set[c] -= 1 : null;
+    completion.forEach((c) => {
+        set[c] ? (set[c] -= 1) : null;
     });
     for (var i in set) {
         if (set[i] !== 0) return i;
     }
 }
 
-test.areEqualStr(solution(['leo', 'kiki', 'eden'], ['eden', 'kiki']), "leo");
-test.areEqualStr(solution(['mislav', 'stanko', 'mislav', 'ana'], ['stanko', 'ana', 'mislav']), "mislav");
-
+// test.areEqualStr(solution(["leo", "kiki", "eden"], ["eden", "kiki"]), "leo");
+// test.areEqualStr(
+//     solution(
+//         ["mislav", "stanko", "mislav", "ana"],
+//         ["stanko", "ana", "mislav"]
+//     ),
+//     "mislav"
+// );
 
 // refactoring
 
-function solution(participant, completion) {    
-    participant.sort();
-    completion.sort();
-    for (var i in participant) {
-        if (participant[i] !== completion[i]) return participant[i];
+// map 에 기록하여 없거나 -1 되면 완주목록에 없는 것으로 판단하는 방식
+function solution_new(participant, completion) {
+    const map = new Map();
+    completion.forEach((v) => {
+        if (map.has(v)) map.set(v, map.get(v) + 1);
+        else map.set(v, 1);
+    });
+
+    for (let i = 0; i < participant.length; i++) {
+        const val = participant[i];
+        if (map.has(val)) {
+            map.set(val, map.get(val) - 1);
+            if (map.get(val) < 0) return val;
+        } else {
+            return val;
+        }
     }
+    return "";
 }
+console.log(
+    solution_new(
+        ["mislav", "stanko", "mislav", "ana"],
+        ["stanko", "ana", "mislav"]
+    )
+);
+console.log(
+    solution_new(
+        ["marina", "josipa", "nikola", "vinko", "filipa"],
+        ["josipa", "filipa", "marina", "nikola"]
+    )
+);
