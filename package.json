@@ -1,0 +1,22 @@
+{
+  "name": "algorithm.study",
+  "version": "1.0.0",
+  "description": "알고리즘 수련 저장소",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jintae-kimchi/algorithm.study.git"
+  },
+  "author": "jintae.kimchi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jintae-kimchi/algorithm.study/issues"
+  },
+  "homepage": "https://github.com/jintae-kimchi/algorithm.study#readme",
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}
