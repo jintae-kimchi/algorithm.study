@@ -95,36 +95,47 @@ var solveSudoku_failed = function (board) {
 };
 
 const solveSudoku = (board) => {
-    const charSet = Array.from({ length: 9 }, (_, i) => String(i + 1));
-    const solve = (b) => {
-        for (let r = 0; r < b.length; r++) {
-            for (let c = 0; c < b[r].length; c++) {
-                if (b[r][c] === ".") {
-                    for (let i = 0; i < charSet.length; i++) {
-                        let ch = charSet[i];
-                        if (validation(b, r, c, ch)) {
-                            b[r][c] = ch;
-                            if (solve(b)) return;
-                            else b[r][c] = ".";
-                        }
-                    }
-                }
-            }
+    const validation = (arr, r, c, v) => {
+        // 가로
+        for (let i = 0; i < 9; i++) {
+            if (arr[r][i] === v) return false;
+            if (arr[i][c] === v) return false;
         }
-    };
-    const validation = (b, r, c, ch) => {
+        // 사각형
         let boxRow = Math.floor(r / 3) * 3;
         let boxCol = Math.floor(c / 3) * 3;
-        for (let i = 0; i < b.length; i++) {
-            if (b[i][c] === ch) return false;
-            if (b[r][i] === ch) return false;
-            if (b[boxRow + Math.floor(i / 3)][boxCol + (i % 3)] === ch)
-                return false;
+        for (let br = boxRow; br < boxRow + 3; br++) {
+            for (let bc = boxCol; bc < boxCol + 3; bc++) {
+                if (arr[br][bc] === v) return false;
+            }
         }
         return true;
     };
+    const backTrack = (arr) => {
+        // 전체 셀을 진행
+        for (let row = 0; row < arr.length; row++) {
+            for (let col = 0; col < arr[row].length; col++) {
+                // 이미 값이 있는 경우는 넘어감
+                if (arr[row][col] !== ".") continue;
+                // 셀마다 1~9까지 지정한 조건으로 완성시켜봄
+                for (let num = 1; num <= 9; num++) {
+                    if (validation(arr, row, col, String(num))) {
+                        // 빈칸이면 채울 수 있는값 찾아서 넣음
+                        arr[row][col] = String(num);
+                        // 넣은 값을 가진 게임판으로 게임 진행
+                        if (backTrack(arr)) return true;
+                        // 중간에 못채웠으면 해당 값 날리고 다음 값으로 다시 진행
+                        arr[row][col] = ".";
+                    }
+                }
+                // 다 넣어봐도 답이 없음
+                return false;
+            }
+        }
 
-    solve(board);
+        return true;
+    };
+    backTrack(board);
 };
 
 const tcList = [
@@ -152,20 +163,20 @@ const tcList = [
             ["3", "4", "5", "2", "8", "6", "1", "7", "9"],
         ],
     ],
-    // [
-    //     [
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //         [".", ".", ".", ".", ".", ".", ".", ".", "."],
-    //     ],
-    //     [],
-    // ],
+    [
+        [
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "."],
+        ],
+        [],
+    ],
     [
         [
             [".", ".", "9", "7", "4", "8", ".", ".", "."],
